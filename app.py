@@ -67,11 +67,10 @@ def handle_userinput(user_question):
             st.write(bot_template.replace(
                 "{{MSG}}", message.content), unsafe_allow_html=True)
 
-
 def main():
     # load_dotenv()
     load_dotenv(".streamlit/secrets.toml")
-    st.set_page_config(page_title="Chat with Premium Management PDFs",
+    st.set_page_config(page_title="Chat with Premium Management PDFs 👇",
                        page_icon=":books:")
     st.write(css, unsafe_allow_html=True)
 
@@ -81,7 +80,7 @@ def main():
         st.session_state.chat_history = ""
 
     st.header("Ask a question about Topic of Premium Management :books:")
-    user_question = st.text_input("Ask a question about Topic of Premium Management :",disabled=True)
+    user_question = st.text_input("Ask a question about Topic of Premium Management :")
     if user_question:
         handle_userinput(user_question)
 
@@ -103,7 +102,7 @@ def main():
                 # create conversation chain
                 st.session_state.conversation = get_conversation_chain(
                     vectorstore)
-                st.text_input(disabled=False)
+                # st.text_input(disabled=False)
 
 
 if __name__ == '__main__':
