@@ -71,7 +71,7 @@ def handle_userinput(user_question):
 def main():
     # load_dotenv()
     load_dotenv(".streamlit/secrets.toml")
-    st.set_page_config(page_title="Chat with multiple PDFs",
+    st.set_page_config(page_title="Chat with Premium Management PDFs",
                        page_icon=":books:")
     st.write(css, unsafe_allow_html=True)
 
@@ -80,15 +80,15 @@ def main():
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = ""
 
-    st.header("Chat with multiple PDFs :books:")
-    user_question = st.text_input("Ask a question about your documents:",disabled=True)
+    st.header("Ask a question about Topic of Premium Management :books:")
+    user_question = st.text_input("Ask a question about Topic of Premium Management :",disabled=True)
     if user_question:
         handle_userinput(user_question)
 
     with st.sidebar:
         st.subheader("Your documents")
         pdf_docs = st.file_uploader(
-            "Upload your PDFs here and click on 'Process'", accept_multiple_files=True)
+            "Upload your Premium Management PDFs here and click on 'Process'", accept_multiple_files=True)
         if st.button("Process"):
             with st.spinner("Processing"):
                 # get pdf text
