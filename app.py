@@ -81,7 +81,7 @@ def main():
         st.session_state.chat_history = ""
 
     st.header("Chat with multiple PDFs :books:")
-    user_question = st.text_input("Ask a question about your documents:")
+    user_question = st.text_input("Ask a question about your documents:",disabled=True)
     if user_question:
         handle_userinput(user_question)
 
@@ -103,6 +103,7 @@ def main():
                 # create conversation chain
                 st.session_state.conversation = get_conversation_chain(
                     vectorstore)
+                st.text_input(disabled=False)
 
 
 if __name__ == '__main__':
