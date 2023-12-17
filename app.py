@@ -35,7 +35,7 @@ model_name = "gpt-4"
 llm = OpenAI(api_key=key,model_name=model_name)
 chain = load_qa_chain(llm, chain_type="stuff")
 
-
+directory="./content/data/*.pdf"
 def load_docs(directory):
   loader = get_pdf_text("./content/data/*.pdf")
   documents = loader.load()
