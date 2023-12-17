@@ -10,12 +10,12 @@ from langchain.chains import ConversationalRetrievalChain
 from htmlTemplates import css, bot_template, user_template
 from langchain.llms import OpenAI
 from langchain.chains.question_answering import load_qa_chain
-from langchain.document_loaders import DirectoryLoader
+# from langchain.document_loaders import DirectoryLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-import sentence_transformers
-from sentence_transformers import SentenceTransformer,util
-from langchain.document_loaders import PyPDFLoader
-from langchain.document_loaders.parsers.pdf import PyPDFParser
+# import sentence_transformers
+# from sentence_transformers import SentenceTransformer,util
+# from langchain.document_loaders import PyPDFLoader
+# from langchain.document_loaders.parsers.pdf import PyPDFParser
 
 import pinecone 
 from langchain.vectorstores import Pinecone
@@ -35,19 +35,9 @@ model_name = "gpt-4"
 llm = OpenAI(api_key=key,model_name=model_name)
 chain = load_qa_chain(llm, chain_type="stuff")
 
-directory = './content/data/'
 
-# loaders = {
-#     '.pdf': GenericLoader.from_filesystem(
-#         path="content/data",
-#         glob="**/*.pdf",
-#         parser=PyPDFParser(),
-#         show_progress=True
-#     ),
-#     # Add other file types and their respective loaders here
-# }
 def load_docs(directory):
-  loader = PyPDFLoader("./content/data/*.pdf")
+  loader = get_pdf_text("./content/data/*.pdf")
   documents = loader.load()
   return documents
 
@@ -59,7 +49,7 @@ def split_docs(documents,chunk_size=1000,chunk_overlap=20):
   docs = text_splitter.split_documents(documents)
   return docs
 
-docs = split_docs(documents)
+docs = get_pdf_text(documents)
 st.write(len(docs))
 
 embeddings = OpenAIEmbeddings(model_name="ada")
