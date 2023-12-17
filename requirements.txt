@@ -11,3 +11,4 @@ unstructured
 pinecone-client
 tiktoken 
 OpenAI
+pinecone
