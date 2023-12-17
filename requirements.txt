@@ -17,4 +17,4 @@ openai
 sentence-transformers
 pinecone-client
 BeautifulSoup4
-pypdf
+PyPDF2==1.27.5
