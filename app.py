@@ -8,10 +8,80 @@ from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from htmlTemplates import css, bot_template, user_template
+from langchain.llms import OpenAI
+from langchain.chains.question_answering import load_qa_chain
+from langchain.document_loaders import DirectoryLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 
+import pinecone 
+from langchain.vectorstores import Pinecone
 
+import openai
+from langchain.embeddings.openai import OpenAIEmbeddings
+import os
 
+load_dotenv(".streamlit/secrets.toml")
+key=os.environ["openai_api_key"]
+pinecone_key =os.environ["PINECONE_API_KEY"]
+pinecone_env =os.environ["PINECONE_ENVIRONMENT"]
+pinecone_index =os.environ["PINECONE_INDEX"]
+# =os.getenv["openai_api_key"]
 
+model_name = "gpt-4"
+llm = OpenAI(api_key=key,model_name=model_name)
+chain = load_qa_chain(llm, chain_type="stuff")
+
+directory = '/content/data'
+
+def load_docs(directory):
+  loader = DirectoryLoader(directory)
+  documents = loader.load()
+  return documents
+
+documents = load_docs(directory)
+len(documents)
+
+def split_docs(documents,chunk_size=1000,chunk_overlap=20):
+  text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
+  docs = text_splitter.split_documents(documents)
+  return docs
+
+docs = split_docs(documents)
+st.write(len(docs))
+
+embeddings = OpenAIEmbeddings(model_name="ada")
+
+query_result = embeddings.embed_query("Hello world")
+len(query_result)
+
+pinecone.init(
+    api_key=pinecone_key,  # find at app.pinecone.io
+    environment=pinecone_env # next to api key in console
+)
+
+index_name = pinecone_index
+
+index = Pinecone.from_documents(docs, embeddings, index_name=index_name)
+
+def get_similiar_docs(query,k=2,score=False):
+  if score:
+    similar_docs = index.similarity_search_with_score(query,k=k)
+  else:
+    similar_docs = index.similarity_search(query,k=k)
+  return similar_docs
+
+query = "How is india's economy"
+similar_docs = get_similiar_docs(query)
+similar_docs
+
+def get_answer(query):
+  similar_docs = get_similiar_docs(query)
+  # print(similar_docs)
+  answer =  chain.run(input_documents=similar_docs, question=query)
+  return  answer
+
+query = "How is india's economy"  
+get_answer(query)
 
 def get_pdf_text(pdf_docs):
     text = ""
@@ -83,6 +153,8 @@ def main():
     user_question = st.text_input("Ask a question about Topic of Premium Management :")
     if user_question:
         handle_userinput(user_question)
+        query = "How relations between india and us has improved?"
+        get_answer(query)
 
     with st.sidebar:
         st.subheader("Your documents")
