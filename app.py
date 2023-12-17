@@ -42,7 +42,7 @@ def load_docs():
  docs = loader.load()
  return docs
 
-documents = load_docs(directory)
+documents = load_docs()
 len(documents)
 
 def split_docs(documents,chunk_size=1000,chunk_overlap=20):
