@@ -12,6 +12,9 @@ from langchain.llms import OpenAI
 from langchain.chains.question_answering import load_qa_chain
 from langchain.document_loaders import DirectoryLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+import sentence_transformers
+from sentence_transformers import SentenceTransformer,util
+
 
 import pinecone 
 from langchain.vectorstores import Pinecone
@@ -74,6 +77,7 @@ query = "How is india's economy"
 similar_docs = get_similiar_docs(query)
 similar_docs
 
+chain = load_qa_chain(llm, chain_type="stuff")
 def get_answer(query):
   similar_docs = get_similiar_docs(query)
   # print(similar_docs)

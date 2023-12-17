@@ -11,7 +11,8 @@ unstructured
 pinecone-client
 tiktoken 
 OpenAI
-
+unstructured
+unstructured[local-inference]
 openai
 sentence-transformers
 pinecone-client
