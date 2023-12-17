@@ -14,7 +14,8 @@ from langchain.document_loaders import DirectoryLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import sentence_transformers
 from sentence_transformers import SentenceTransformer,util
-
+from langchain.document_loaders import GenericLoader
+from langchain.document_loaders.parsers.pdf import PyPDFParser
 
 import pinecone 
 from langchain.vectorstores import Pinecone
@@ -34,10 +35,19 @@ model_name = "gpt-4"
 llm = OpenAI(api_key=key,model_name=model_name)
 chain = load_qa_chain(llm, chain_type="stuff")
 
-directory = './content/data'
+directory = './content/data/'
 
+loaders = {
+    '.pdf': GenericLoader.from_filesystem(
+        path="content/data",
+        glob="**/*.pdf",
+        parser=PyPDFParser(),
+        show_progress=True
+    ),
+    # Add other file types and their respective loaders here
+}
 def load_docs(directory):
-  loader = DirectoryLoader(directory)
+  loader = loaders
   documents = loader.load()
   return documents
 
