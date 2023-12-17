@@ -31,7 +31,7 @@ model_name = "gpt-4"
 llm = OpenAI(api_key=key,model_name=model_name)
 chain = load_qa_chain(llm, chain_type="stuff")
 
-directory = '/content/data'
+directory = './content/data'
 
 def load_docs(directory):
   loader = DirectoryLoader(directory)
