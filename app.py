@@ -14,7 +14,7 @@ from langchain.document_loaders import DirectoryLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import sentence_transformers
 from sentence_transformers import SentenceTransformer,util
-from langchain.document_loaders import GenericLoader
+from langchain.document_loaders import PyPDFLoader
 from langchain.document_loaders.parsers.pdf import PyPDFParser
 
 import pinecone 
@@ -37,17 +37,17 @@ chain = load_qa_chain(llm, chain_type="stuff")
 
 directory = './content/data/'
 
-loaders = {
-    '.pdf': GenericLoader.from_filesystem(
-        path="content/data",
-        glob="**/*.pdf",
-        parser=PyPDFParser(),
-        show_progress=True
-    ),
-    # Add other file types and their respective loaders here
-}
+# loaders = {
+#     '.pdf': GenericLoader.from_filesystem(
+#         path="content/data",
+#         glob="**/*.pdf",
+#         parser=PyPDFParser(),
+#         show_progress=True
+#     ),
+#     # Add other file types and their respective loaders here
+# }
 def load_docs(directory):
-  loader = loaders
+  loader = PyPDFLoader("./content/data/*.pdf")
   documents = loader.load()
   return documents
 
