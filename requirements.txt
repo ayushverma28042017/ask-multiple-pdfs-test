@@ -11,7 +11,7 @@ unstructured
 pinecone-client
 tiktoken 
 OpenAI
-pinecone
+
 openai
 sentence-transformers
 pinecone-client
