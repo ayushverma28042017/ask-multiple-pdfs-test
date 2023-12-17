@@ -23,6 +23,7 @@ from langchain.vectorstores import Pinecone
 import openai
 from langchain.embeddings.openai import OpenAIEmbeddings
 import os
+from langchain.document_loaders import DirectoryLoader
 
 load_dotenv(".streamlit/secrets.toml")
 key=os.environ["openai_api_key"]
@@ -35,11 +36,11 @@ model_name = "gpt-4"
 llm = OpenAI(api_key=key,model_name=model_name)
 chain = load_qa_chain(llm, chain_type="stuff")
 
-directory="./content/data/*.pdf"
-def load_docs(directory):
-  loader = get_pdf_text("./content/data/*.pdf")
-  documents = loader.load()
-  return documents
+# directory=".\\content\\data"
+def load_docs():
+ loader = DirectoryLoader('../', glob="**/*.pdf", show_progress=True)
+ docs = loader.load()
+ return docs
 
 documents = load_docs(directory)
 len(documents)
